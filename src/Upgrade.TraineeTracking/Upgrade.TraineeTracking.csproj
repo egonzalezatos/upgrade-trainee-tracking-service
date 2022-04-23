@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Upgrade.TraineeTracking.Api\Upgrade.TraineeTracking.Api.csproj" />
+    <ProjectReference Include="..\Upgrade.TraineeTracking.Infrastructure\Upgrade.TraineeTracking.Infrastructure.csproj" />
+    <ProjectReference Include="..\Upgrade.TraineeTracking.IoC\Upgrade.TraineeTracking.IoC.csproj" />
+    <ProjectReference Include="..\Upgrade.TraineeTracking.Redis\Upgrade.TraineeTracking.Redis.csproj" />
+  </ItemGroup>
+</Project>

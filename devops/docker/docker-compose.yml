@@ -1,0 +1,66 @@
+services:
+  service:
+    image: course-tracking-service:v3
+    ports:
+      - 5004:80
+    environment:
+      MONGO_USERNAME: admin
+      MONGO_PASSWORD: admin
+    depends_on: 
+      - mongo
+
+  course-service:
+    image: course-service
+    ports:
+      - 5003:5001
+      - 667:667
+  
+  mongo:
+    image: mongo:5.0
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    volumes:
+      - mongo-pv:/data/db
+    healthcheck: 
+      test: mongo --eval 'db.runCommand("ping").ok' | mongo mongo:27017/test --quiet
+      interval: 1m
+      start_period: 1m
+      retries: 5
+    
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8082:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_MONGODB_ADMINPASSWORD: admin
+      
+  profile-manage-db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: profile-manage-db
+    ports:
+      - 1433:1433
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: Admin123
+    volumes:
+      - mssql-pv:/var/opt/mssql
+      
+  profile-manage-service:
+    image: profile-manage
+    container_name: profile-manage-service
+    ports:
+      - 5005:80
+    depends_on: 
+      - profile-manage-db
+
+
+volumes:
+  mongo-pv:
+  mssql-pv:

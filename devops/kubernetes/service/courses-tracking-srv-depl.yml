@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: courses-tracking-srv-depl
+  namespace: courses-tracking
+  
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: courses-tracking-srv
+  template:
+    metadata:
+      labels:
+        app: courses-tracking-srv
+    spec:
+      containers:
+        - name: courses-tracking-container
+          image: egonzalezatos/trainee-tracking
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          env:
+          #DATABASE
+            - name: DB_SERVER
+              value: courses-tracking-db-ip
+            - name: DB_PORT
+              value: "27017"
+            - name: DB_DATABASE
+              value: course_tracking_db
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: courses-tracking-secret
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: courses-tracking-secret
+          #REDIS
+            - name: REDIS_HOST
+              value: courses-tracking-redis-ip
+            - name: REDIS_PORT
+              value: "6379"
+            - name: REDIS_PASS
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: courses-tracking-secret
+            #GRPC
+            - name: GRPC_PMS_HOST
+              value: profile-manage-srv-ip.profile-manage
+            - name: GRPC_PMS_PORT
+              value: "666"
+            - name: GRPC_CS_HOST
+              value: courses-srv-ip.courses
+            - name: GRPC_CS_PORT
+              value: "667"
+---
+#Cluster IP
+apiVersion: v1
+kind: Service
+metadata:
+  name: courses-tracking-srv-ip
+  namespace: courses-tracking
+spec:
+  type: ClusterIP
+  selector:
+    app: courses-tracking-srv
+  ports:
+    - name: courses-tracking-srv
+      port: 80
+      targetPort: 80
+      protocol: TCP
+      
+--- 
+#Node Port
+apiVersion: v1
+kind: Service
+metadata:
+  name: courses-tracking-srv-nodeport
+  namespace: courses-tracking
+spec:
+  type: NodePort
+  selector:
+    app: courses-tracking-srv
+  ports:
+    - name: courses-tracking-srv
+      port: 80
+      targetPort: 80
+      nodePort: 32649
+
+    

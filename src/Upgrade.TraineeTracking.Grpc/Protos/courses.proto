@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option csharp_namespace = "Upgrade.TraineeTracking.Grpc";
+
+
+//GetByIds(request) return (response);
+service GrpcCourses {
+  rpc GetByIds (GetByIdsRequest) returns (GetByIdsResponse);
+}
+message GetByIdsRequest {
+  repeated int32 Ids = 1;
+}
+message GetByIdsResponse {
+  repeated Course courses = 1;
+}
+
+//Models
+message Course {
+  int32 Id = 1;
+  string Name = 2;
+  string Description = 3;
+  double Duration = 4;
+  double Rating = 5;
+}
+
+////////// Another Service ////////////

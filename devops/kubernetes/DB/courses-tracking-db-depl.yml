@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: courses-tracking-db-depl
+  namespace: courses-tracking
+  
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: courses-tracking-db
+  template:
+    metadata:
+      labels:
+        app: courses-tracking-db
+    spec:
+      containers:
+        - name: courses-tracking-db-container
+          image: mongo:5.0
+          ports:
+            - containerPort: 27017
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: courses-tracking-secret
+                  key: username
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: courses-tracking-secret
+                  key: password
+          volumeMounts:
+            - mountPath: /data/db 
+              name: courses-tracking-db-pv
+      volumes:
+        - name: courses-tracking-db-pv
+          persistentVolumeClaim:
+            claimName: courses-tracking-db-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: courses-tracking-db-ip
+  namespace: courses-tracking
+spec:
+  type: ClusterIP
+  selector:
+    app: courses-tracking-db
+  ports:
+    - name: courses-tracking-db
+      port: 27017
+      protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: courses-tracking-db-nodeport
+  namespace: courses-tracking
+spec:
+  type: NodePort
+  selector:
+    app: courses-tracking-db
+  ports:
+    - name: courses-tracking-db
+      port: 27017
+      protocol: TCP

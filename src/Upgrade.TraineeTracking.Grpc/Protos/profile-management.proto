@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+option csharp_namespace = "Upgrade.TraineeTracking.Grpc";
+
+service GrpcProfileManagement {
+  rpc GetProfilesByUsersIds (GetProfilesByUsersIdsRequest) returns (ProfilesResponse);
+  rpc GetProfileByFlattenPlan (GetProfileByFlattenPlanRequest) returns
+      (GetProfileByFlattenPlanResponse);
+}
+//Methods Requests and response
+//GetProfilesByUsersIds
+message GetProfilesByUsersIdsRequest {
+  repeated int32 userIds = 1; //int[]
+}
+message ProfilesResponse {
+  repeated Profile Profiles = 1; //Profile[]
+}
+
+//GetProfileByUserPositionLevel
+message GetProfileByFlattenPlanRequest {
+  int32 positionId = 1;
+  int32 levelId = 2;
+  int32 technologyId = 3;
+}
+
+message GetProfileByFlattenPlanResponse {
+  Profile profile = 1;
+}
+
+//Models
+message Profile {
+  int32 Id = 1;
+  JobPosition JobPosition = 2;
+  Technology Technology = 3;
+  Level Level = 4;
+}
+message Level {
+  int32 Id = 1;
+  string Name = 2;
+  optional string Description = 3;
+  Status Status = 4;
+}
+message JobPosition {
+  int32 Id = 1;
+  string Name = 2;
+  optional string Description = 3;
+  Status Status = 4;
+}
+message Technology {
+  int32 Id = 1;
+  string Name = 2;
+  optional string Description = 3;
+  Status Status = 4;
+}
+message Status {
+  int32 Id = 1;
+  string Name = 2;
+}
