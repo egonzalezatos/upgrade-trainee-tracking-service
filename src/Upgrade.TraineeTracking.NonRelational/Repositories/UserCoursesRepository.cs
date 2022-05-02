@@ -1,16 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using Upgrade.TraineeTracking.Domain.Models;
 using Upgrade.TraineeTracking.Domain.Repositories;
-using Upgrade.TraineeTracking.Infrastructure.Configurations;
+using Upgrade.TraineeTracking.NonRelational.Configurations;
 
-namespace Upgrade.TraineeTracking.Infrastructure.Repositories
+namespace Upgrade.TraineeTracking.NonRelational.Repositories
 {
-    public class UserCoursesRepository : Repository<UserCourses>, IUserCoursesRepository
+    public class UserCoursesRepository : Repository<UserCourses, string>, IUserCoursesRepository
     {
         public static string CollectionNameStatic = "user_courses";
         public override string CollectionName { get; } = CollectionNameStatic;
@@ -31,6 +31,7 @@ namespace Upgrade.TraineeTracking.Infrastructure.Repositories
             var userCourses = plans.AsQueryable()
                 .Where(plan => plan.UserId == userId && plan.JobProfileId == profileId)
                 .Join(Collection, plan => plan.UserId, course => course.UserId, (plan, course) => course);
+            Console.Out.WriteLine();
             return await userCourses.ToListAsync(CancellationToken.None);
         }
     }

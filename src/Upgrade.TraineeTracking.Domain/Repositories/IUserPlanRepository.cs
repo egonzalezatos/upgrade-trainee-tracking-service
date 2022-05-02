@@ -4,7 +4,7 @@ using Upgrade.TraineeTracking.Domain.Models;
 
 namespace Upgrade.TraineeTracking.Domain.Repositories
 {
-    public interface IUserPlanRepository : IRepository<UserPlan>
+    public interface IUserPlanRepository : IRepository<UserPlan, string>
     {
         public Task<List<UserPlan>> FindByUserIdAndProfileId(int userId, int profileId);
         

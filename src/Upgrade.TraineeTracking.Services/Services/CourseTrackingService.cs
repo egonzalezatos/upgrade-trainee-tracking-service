@@ -79,8 +79,16 @@ namespace Upgrade.TraineeTracking.Services.Services
             int userId, int positionId, int levelId, int technologyId)
         {
             JobProfileDto profile = await _profileManagementClient.GetProfileByFlattenPlan(positionId, levelId, technologyId);
-            List<UserCourses> courses = await _trackingRepository.GetByUserIdAndProfileId(userId, profile.Id);
-            return _userCourseMapper.ToDto<UserCourseDto>(courses);
+            List<UserCourses> userCourses = await _trackingRepository.GetByUserIdAndProfileId(userId, profile.Id);
+            List<int> ids = userCourses.Select(course => course.CourseId).ToList();
+            var courseDtosTask =  _coursesServiceClient.GetByIds(ids);
+            List<UserCourseDto> userCourseDtos = _userCourseMapper.ToDto<UserCourseDto>(userCourses);
+            List<CourseDto> courseDtos = await courseDtosTask;
+            foreach (var (dto, entity) in userCourseDtos.Zip(userCourses))
+            {
+                dto.CourseDto = courseDtos.First(c => c.Id == entity.CourseId);
+            }
+            return userCourseDtos;
         }
     }
 }

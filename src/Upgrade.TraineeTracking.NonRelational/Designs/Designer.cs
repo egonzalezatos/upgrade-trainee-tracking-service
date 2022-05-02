@@ -3,15 +3,16 @@ using System.Linq;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
+using Sdk.Domain.Models;
 using Upgrade.TraineeTracking.Domain.Models;
 
-namespace Upgrade.TraineeTracking.Infrastructure.Designs
+namespace Upgrade.TraineeTracking.NonRelational.Designs
 {
     public sealed class Designer
     {
-        public static void RunDesigns()
+        public static void RunDesigns<TKey>()
         {
-            BsonClassMap.RegisterClassMap<Identifiable>(o =>
+            BsonClassMap.RegisterClassMap<Entity<TKey>>(o =>
             {
                 o.SetIsRootClass(true);
                 o.MapIdMember(doc => doc.Id);

@@ -1,6 +1,8 @@
-﻿namespace Upgrade.TraineeTracking.Domain.Models
+﻿using Sdk.Domain.Models;
+
+namespace Upgrade.TraineeTracking.Domain.Models
 {
-    public class UserPlan : Identifiable
+    public class UserPlan : Entity<string?>
     {
         public int UserId { get; set; }
         public int JobProfileId { get; set; }

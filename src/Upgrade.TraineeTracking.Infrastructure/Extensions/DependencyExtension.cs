@@ -1,34 +1,31 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Upgrade.TraineeTracking.Domain.Repositories;
-using Upgrade.TraineeTracking.Infrastructure.Configurations;
-using Upgrade.TraineeTracking.Infrastructure.Designs;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Upgrade.TraineeTracking.InMemory.Configurations;
+using Upgrade.TraineeTracking.NonRelational.Configurations;
 
 namespace Upgrade.TraineeTracking.Infrastructure.Extensions
 {
     public static class DependencyExtension
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services)
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddContext();
-            services.AddRepositories();
+            if (configuration.IsInMemory())
+                InMemoryConfiguration.Configure(services, database: "test");
+            else if (configuration.IsNonRelational())
+                NonRelationalConfiguration.Configure(services);
             return services;
         }
 
-        public static IServiceCollection AddContext(this IServiceCollection services)
+        public static IApplicationBuilder UseSeeds(this IApplicationBuilder app, IConfiguration configuration)
         {
-            services.AddSingleton<IMongoDbConnection, MongoDbConnection>();
-            Designer.RunDesigns();
-            return services;
-        }
-        
-        public static IServiceCollection AddRepositories(this IServiceCollection services)
-        {
-            services.Scan(selector => selector
-                .FromAssembliesOf(typeof(IRepository), typeof(DependencyExtension))
-                .AddClasses(classes => classes.Where( t=>!t.IsInterface && t.IsAssignableTo(typeof(IRepository)) && t.Name.EndsWith("Repository")))
-            .AsMatchingInterface()
-               .WithScopedLifetime());
-            return services;
+            using (var scope = app.ApplicationServices.CreateScope())
+                if (configuration.IsInMemory())
+                    InMemoryConfiguration.Seed(scope.ServiceProvider);
+                else if (configuration.IsNonRelational())
+                    NonRelationalConfiguration.Seed(scope.ServiceProvider);
+            return app;
         }
     }
 }

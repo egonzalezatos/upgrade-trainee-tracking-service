@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson.Serialization;
 using Upgrade.TraineeTracking.Domain.Models;
 
-namespace Upgrade.TraineeTracking.Infrastructure.Designs
+namespace Upgrade.TraineeTracking.NonRelational.Designs
 {
     public class UserCoursesDesign : ModelDesign<UserCourses>
     {

@@ -1,4 +1,4 @@
-﻿namespace Upgrade.TraineeTracking.Infrastructure.Configurations
+﻿namespace Upgrade.TraineeTracking.NonRelational.Configurations
 {
     public class DatabaseSettings
     {

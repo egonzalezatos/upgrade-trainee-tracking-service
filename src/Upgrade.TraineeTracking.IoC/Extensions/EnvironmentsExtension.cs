@@ -11,10 +11,11 @@ namespace Upgrade.TraineeTracking.IoC.Extensions
     {
         public static IServiceCollection ReadConfigurationEnvironments(this IServiceCollection services, IConfiguration configuration)
         {
-            configuration.ReadRedisEnvironments();
-            configuration.ReadDbEnvironments();
-            configuration.ReadGrpcEnvironments(GrpcCodeNames.GRPC_COURSES);
-            configuration.ReadGrpcEnvironments(GrpcCodeNames.GRPC_PROFILE_MANAGEMENT);
+            configuration["ConnectionStrings:Redis"] = configuration.ReadRedisEnvironments();
+            configuration["ConnectionStrings:DbConnect"] = configuration.ReadDbConnectionEnvironments();
+            configuration["ConnectionStrings:DbName"] = configuration.ReadDbNameEnvironments();
+            configuration[$"Grpc:{GrpcCodeNames.GRPC_COURSES}"] = configuration.ReadGrpcEnvironments(GrpcCodeNames.GRPC_COURSES);
+            configuration[$"Grpc:{GrpcCodeNames.GRPC_PROFILE_MANAGEMENT}"] = configuration.ReadGrpcEnvironments(GrpcCodeNames.GRPC_PROFILE_MANAGEMENT);
             return services;
         }
     }

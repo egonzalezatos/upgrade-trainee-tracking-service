@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Upgrade.TraineeTracking.Api.Extensions;
 using Upgrade.TraineeTracking.Infrastructure.Extensions;
+using Upgrade.TraineeTracking.InMemory.Extensions;
 using Upgrade.TraineeTracking.IoC.Extensions;
 using Upgrade.TraineeTracking.Redis.Extensions;
 
@@ -29,7 +30,7 @@ namespace Upgrade.TraineeTracking
 
             services
                 .AddApi()
-                .AddInfrastructure()
+                .AddInfrastructure(Configuration)
                 .AddDependencies()
                 .AddRedis(Configuration.GetConnectionString("Redis"), "redis");
             
@@ -44,7 +45,7 @@ namespace Upgrade.TraineeTracking
         {
             app.UseDeveloperExceptionPage();
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CleanArchProject v1"));
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("v1/swagger.json", "CleanArchProject v1"));
 
             app.UseHttpsRedirection();
 
@@ -56,6 +57,9 @@ namespace Upgrade.TraineeTracking
             {
                 endpoints.MapControllers();
             });
+            
+            //Seed database
+            app.UseSeeds(Configuration);
         }
     }
 }

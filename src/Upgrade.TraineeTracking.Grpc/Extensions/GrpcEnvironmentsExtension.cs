@@ -6,20 +6,23 @@ namespace Upgrade.TraineeTracking.Grpc.Extensions
 {
     public static class GrpcEnvironmentsExtension
     {
-        public static IConfiguration ReadGrpcEnvironments(this IConfiguration configuration, string grpcCode)
+        public static string ReadGrpcEnvironments(this IConfiguration configuration, string grpcCode)
         {
-            configuration[$"Grpc:{grpcCode}"] = new StringBuilder()
+            var @string = new StringBuilder()
                 .Append($"http://")
                 .Append($"{configuration[grpcCode + "_HOST"]}:")
                 .Append($"{configuration[grpcCode + "_PORT"]}")
                 .ToString();
-            Console.Out.WriteLine(configuration[$"Grpc:{grpcCode}"]);
-            return configuration;
+            return @string;
         }
         
-        public static string GetGrpc(this IConfiguration configuration, string grpcCode)
+        public static string ReadGrpcServerEnvironments(this IConfiguration configuration)
         {
-            return configuration[$"Grpc:{grpcCode}"];
+            var @string = new StringBuilder()
+                .Append($"http://+:{configuration["GRPC_PORT"]}")
+                .ToString();
+            Console.Out.WriteLine(@string);
+            return @string;
         }
     }
 }

@@ -1,17 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Upgrade.TraineeTracking.Domain.Models;
+using Sdk.Domain.Models;
 
 namespace Upgrade.TraineeTracking.Domain.Repositories
 {
     public interface IRepository {}
-    public interface IRepository<TDocument> : IRepository where TDocument : Identifiable
+    public interface IRepository<T, TKey> : IRepository where T : Entity<TKey>
     {
-        public Task<List<TDocument>> GetAsync();
-        public Task<TDocument?> GetAsync(string id);
-        public Task CreateAsync(TDocument document);
-        public Task UpdateAsync(string id, TDocument updatedDocument);
-        public Task RemoveAsync(string id);
-
+        public Task<List<T>> GetAsync();
+        public Task<T?> GetAsync(TKey id);
+        public Task CreateAsync(T t);
+        public Task UpdateAsync(TKey id, T t);
+        public Task RemoveAsync(TKey id);
     }
 }

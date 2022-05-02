@@ -3,14 +3,13 @@ using System.Threading.Tasks;
 using MongoDB.Driver;
 using Upgrade.TraineeTracking.Domain.Models;
 using Upgrade.TraineeTracking.Domain.Repositories;
-using Upgrade.TraineeTracking.Infrastructure.Configurations;
+using Upgrade.TraineeTracking.NonRelational.Configurations;
 
-namespace Upgrade.TraineeTracking.Infrastructure.Repositories
+namespace Upgrade.TraineeTracking.NonRelational.Repositories
 {
-    
-    public class UserPlanRepository : Repository<UserPlan>, IUserPlanRepository
+    public class UserPlanRepository : Repository<UserPlan, string>, IUserPlanRepository
     {
-        public static string CollectionNameStatic = "user_courses";
+        public static string CollectionNameStatic = "user_plans";
         public override string CollectionName { get; } = CollectionNameStatic;
         
         public UserPlanRepository(IMongoDbConnection connection) : base(connection)

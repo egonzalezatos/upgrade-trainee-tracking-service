@@ -66,3 +66,4 @@ spec:
     - name: courses-tracking-db
       port: 27017
       protocol: TCP
+      nodePort: 31881

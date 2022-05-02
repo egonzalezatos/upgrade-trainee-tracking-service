@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: courses-tracking-container
-          image: egonzalezatos/trainee-tracking
+          image: egonzalezatos/upgrade.trainee-tracking
           imagePullPolicy: Always
           ports:
             - containerPort: 80
@@ -51,7 +51,7 @@ spec:
                   name: courses-tracking-secret
             #GRPC
             - name: GRPC_PMS_HOST
-              value: profile-manage-srv-ip.profile-manage
+              value: trainee-admin-srv-ip.upgrade-trainee-admin
             - name: GRPC_PMS_PORT
               value: "666"
             - name: GRPC_CS_HOST

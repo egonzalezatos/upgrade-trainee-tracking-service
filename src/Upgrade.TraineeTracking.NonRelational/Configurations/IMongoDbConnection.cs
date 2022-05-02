@@ -1,6 +1,6 @@
 using MongoDB.Driver;
 
-namespace Upgrade.TraineeTracking.Infrastructure.Configurations
+namespace Upgrade.TraineeTracking.NonRelational.Configurations
 {
     public interface IMongoDbConnection
     {
