@@ -1,22 +1,22 @@
 services:
   service:
-    image: course-tracking-service:v3
+    image: egonzalezatos/upgrade.trainee-tracking
     ports:
       - 5004:80
     environment:
       MONGO_USERNAME: admin
       MONGO_PASSWORD: admin
     depends_on: 
-      - mongo
+      - trainee-tracking-db
 
   course-service:
-    image: course-service
+    image: egonzalezatos/courses
     ports:
       - 5003:5001
       - 667:667
   
-  mongo:
-    image: mongo:5.0
+  trainee-tracking-db:
+    image: mongo
     restart: always
     ports:
       - 27017:27017
@@ -25,13 +25,8 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: admin
     volumes:
       - mongo-pv:/data/db
-    healthcheck: 
-      test: mongo --eval 'db.runCommand("ping").ok' | mongo mongo:27017/test --quiet
-      interval: 1m
-      start_period: 1m
-      retries: 5
-    
-  mongo-express:
+        
+  trainee-tracking-db-management:
     image: mongo-express
     restart: always
     ports:
@@ -53,7 +48,7 @@ services:
       - mssql-pv:/var/opt/mssql
       
   profile-manage-service:
-    image: profile-manage
+    image: egonzalezatos/upgrade.trainee-admin
     container_name: profile-manage-service
     ports:
       - 5005:80

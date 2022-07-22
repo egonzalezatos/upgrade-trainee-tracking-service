@@ -20,11 +20,11 @@ namespace Upgrade.TraineeTracking.Infrastructure.Extensions
 
         public static IApplicationBuilder UseSeeds(this IApplicationBuilder app, IConfiguration configuration)
         {
-            using (var scope = app.ApplicationServices.CreateScope())
-                if (configuration.IsInMemory())
-                    InMemoryConfiguration.Seed(scope.ServiceProvider);
-                else if (configuration.IsNonRelational())
-                    NonRelationalConfiguration.Seed(scope.ServiceProvider);
+            using var scope = app.ApplicationServices.CreateScope();
+            if (configuration.IsInMemory())
+                InMemoryConfiguration.Seed(scope.ServiceProvider);
+            else if (configuration.IsNonRelational())
+                NonRelationalConfiguration.Seed(scope.ServiceProvider);
             return app;
         }
     }

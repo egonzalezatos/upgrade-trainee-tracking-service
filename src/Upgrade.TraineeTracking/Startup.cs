@@ -1,13 +1,13 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
 using Upgrade.TraineeTracking.Api.Extensions;
 using Upgrade.TraineeTracking.Infrastructure.Extensions;
-using Upgrade.TraineeTracking.InMemory.Extensions;
 using Upgrade.TraineeTracking.IoC.Extensions;
 using Upgrade.TraineeTracking.Redis.Extensions;
+using Upgrade.TraineeTracking.Security.Extensions;
 
 namespace Upgrade.TraineeTracking
 {
@@ -27,32 +27,33 @@ namespace Upgrade.TraineeTracking
         {
             //Replace ConnectionStrings from appsettings using Environment Variables 
             services.ReadConfigurationEnvironments(Configuration);
-
+            
             services
                 .AddApi()
                 .AddInfrastructure(Configuration)
-                .AddDependencies()
-                .AddRedis(Configuration.GetConnectionString("Redis"), "redis");
-            
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "TraineeTracking", Version = "v1" });
-            });
+                .AddSecurity(Configuration)
+                .AddDependencies(Configuration);
+                
+            if (Convert.ToBoolean(Configuration["REDIS_ENABLED"]))
+                services.AddRedis(Configuration.GetConnectionString("Redis"), "redis");
+
+            services.AddApiSwagger();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors("frontpolicy");
             app.UseDeveloperExceptionPage();
-            app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("v1/swagger.json", "CleanArchProject v1"));
+            
+            app.UseApiSwagger();
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
-
+    
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

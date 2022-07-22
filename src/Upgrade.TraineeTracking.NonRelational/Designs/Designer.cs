@@ -26,7 +26,7 @@ namespace Upgrade.TraineeTracking.NonRelational.Designs
             {
                 var instance = Activator.CreateInstance(type);
                 instance!.GetType().GetMethod(nameof(ModelDesign.Configure))!.Invoke(instance, null);
-            }
+            } 
         }
     }
 } 

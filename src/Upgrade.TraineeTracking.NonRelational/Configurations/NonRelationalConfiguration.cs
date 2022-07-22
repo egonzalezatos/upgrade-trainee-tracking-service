@@ -12,7 +12,7 @@ namespace Upgrade.TraineeTracking.NonRelational.Configurations
     {
         public static void Configure(IServiceCollection services)
         {
-            services.AddScoped<IMongoDbConnection, MongoDbConnection>();
+            services.AddSingleton<IMongoDbConnection, MongoDbConnection>();
             Designer.RunDesigns<string?>();
             services.AddRepositories();
         }

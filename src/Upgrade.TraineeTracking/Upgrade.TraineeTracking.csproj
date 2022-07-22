@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\cross-cutting\Upgrade.TraineeTracking.Security\Upgrade.TraineeTracking.Security.csproj" />
     <ProjectReference Include="..\Upgrade.TraineeTracking.Api\Upgrade.TraineeTracking.Api.csproj" />
     <ProjectReference Include="..\Upgrade.TraineeTracking.Infrastructure\Upgrade.TraineeTracking.Infrastructure.csproj" />
     <ProjectReference Include="..\Upgrade.TraineeTracking.IoC\Upgrade.TraineeTracking.IoC.csproj" />
