@@ -15,14 +15,12 @@ namespace Upgrade.TraineeTracking.Grpc.Clients
     public class CoursesServiceClient : ICoursesServiceClient
     {
         private readonly IMapper _mapper;
-        protected readonly GrpcChannel Channel;
-        protected readonly GrpcCourses.GrpcCoursesClient Client;
+        private readonly GrpcCourses.GrpcCoursesClient _client;
 
-        public CoursesServiceClient(IMapper mapper, IConfiguration configuration)
+        public CoursesServiceClient(IMapper mapper, GrpcCourses.GrpcCoursesClient client)
         {
             _mapper = mapper;
-            Channel = GrpcChannel.ForAddress(configuration.GetGrpc(GrpcCodeNames.GRPC_COURSES));
-            Client = new GrpcCourses.GrpcCoursesClient(Channel);
+            _client = client;
         }
 
         public virtual async Task<List<CourseDto>> GetByIds(List<int> ids)
@@ -31,7 +29,7 @@ namespace Upgrade.TraineeTracking.Grpc.Clients
             request.Ids.AddRange(ids);
             try
             {
-                GetByIdsResponse response = await Client.GetByIdsAsync(request);
+                GetByIdsResponse response = await _client.GetByIdsAsync(request);
                 return _mapper.Map<List<Course>, List<CourseDto>>(response.Courses.ToList());
             }
             catch (Exception e)

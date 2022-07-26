@@ -8,6 +8,9 @@ namespace Upgrade.TraineeTracking.Grpc.MapProfiles
         {
             CreateMap<Profile, JobProfileDto>()
                 .ReverseMap();
+            CreateMap<Technology, TechnologyDto>().ReverseMap();
+            CreateMap<JobPosition, JobPositionDto>().ReverseMap();
+            CreateMap<Level, LevelDto>().ReverseMap();
         }
     }
 }

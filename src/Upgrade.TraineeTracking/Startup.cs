@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Upgrade.TraineeTracking.Api.Extensions;
 using Upgrade.TraineeTracking.Infrastructure.Extensions;
 using Upgrade.TraineeTracking.IoC.Extensions;
+using Upgrade.TraineeTracking.Options.Extensions;
 using Upgrade.TraineeTracking.Redis.Extensions;
 using Upgrade.TraineeTracking.Security.Extensions;
 
@@ -29,6 +30,7 @@ namespace Upgrade.TraineeTracking
             services.ReadConfigurationEnvironments(Configuration);
             
             services
+                .LoadOptions(Configuration)
                 .AddApi()
                 .AddInfrastructure(Configuration)
                 .AddSecurity(Configuration)

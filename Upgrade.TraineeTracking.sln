@@ -45,6 +45,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "utils", "utils", "{8E8F1C8F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Upgrade.TraineeTracking.OIDC", "src\cross-cutting\utils\Upgrade.TraineeTracking.OIDC\Upgrade.TraineeTracking.OIDC.csproj", "{A7B0D653-ACCA-4F28-83A8-C96F6C9E5472}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Upgrade.TraineeTracking.Options", "src\cross-cutting\Upgrade.TraineeTracking.Options\Upgrade.TraineeTracking.Options.csproj", "{6F6E30A4-A485-43E2-9F79-E677BF827D1C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -262,6 +264,18 @@ Global
 		{A7B0D653-ACCA-4F28-83A8-C96F6C9E5472}.Release|x64.Build.0 = Release|Any CPU
 		{A7B0D653-ACCA-4F28-83A8-C96F6C9E5472}.Release|x86.ActiveCfg = Release|Any CPU
 		{A7B0D653-ACCA-4F28-83A8-C96F6C9E5472}.Release|x86.Build.0 = Release|Any CPU
+		{6F6E30A4-A485-43E2-9F79-E677BF827D1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F6E30A4-A485-43E2-9F79-E677BF827D1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F6E30A4-A485-43E2-9F79-E677BF827D1C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6F6E30A4-A485-43E2-9F79-E677BF827D1C}.Debug|x64.Build.0 = Debug|Any CPU
+		{6F6E30A4-A485-43E2-9F79-E677BF827D1C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6F6E30A4-A485-43E2-9F79-E677BF827D1C}.Debug|x86.Build.0 = Debug|Any CPU
+		{6F6E30A4-A485-43E2-9F79-E677BF827D1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F6E30A4-A485-43E2-9F79-E677BF827D1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F6E30A4-A485-43E2-9F79-E677BF827D1C}.Release|x64.ActiveCfg = Release|Any CPU
+		{6F6E30A4-A485-43E2-9F79-E677BF827D1C}.Release|x64.Build.0 = Release|Any CPU
+		{6F6E30A4-A485-43E2-9F79-E677BF827D1C}.Release|x86.ActiveCfg = Release|Any CPU
+		{6F6E30A4-A485-43E2-9F79-E677BF827D1C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{36D367CB-683A-4E6D-B1B9-78735EF0BD99} = {EE06096A-62CA-49CA-AB38-D5882759D720}
@@ -283,5 +297,6 @@ Global
 		{B4D92BEA-D5BD-4A0A-A06D-DA3762FD776C} = {26B3DA8F-D0E3-46BD-8EDB-0465FF4323CF}
 		{8E8F1C8F-7FC0-44E2-9204-93CF6D5525B6} = {26B3DA8F-D0E3-46BD-8EDB-0465FF4323CF}
 		{A7B0D653-ACCA-4F28-83A8-C96F6C9E5472} = {8E8F1C8F-7FC0-44E2-9204-93CF6D5525B6}
+		{6F6E30A4-A485-43E2-9F79-E677BF827D1C} = {26B3DA8F-D0E3-46BD-8EDB-0465FF4323CF}
 	EndGlobalSection
 EndGlobal

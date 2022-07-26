@@ -3,37 +3,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Grpc.Core;
 using Grpc.Net.Client;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Upgrade.TraineeTracking.DTO.DTOs;
 using Upgrade.TraineeTracking.Grpc.Abstractions.Clients;
 using Upgrade.TraineeTracking.Grpc.Configurations;
 using Upgrade.TraineeTracking.Grpc.Extensions;
+using Upgrade.TraineeTracking.Options.grpc;
 
 namespace Upgrade.TraineeTracking.Grpc.Clients
 {
     public class ProfileManagementClient : IProfileManagementClient
     {
         private readonly IMapper _mapper;
-        private readonly IConfiguration _configuration;
-        protected readonly GrpcChannel Channel;
         private readonly GrpcProfileManagement.GrpcProfileManagementClient _client;
 
-        public ProfileManagementClient(IMapper mapper, IConfiguration configuration)
+        public ProfileManagementClient(IMapper mapper, GrpcProfileManagement.GrpcProfileManagementClient client)
         {
             _mapper = mapper;
-            _configuration = configuration;
-            Channel = GrpcChannel.ForAddress(_configuration.GetGrpc(GrpcCodeNames.GRPC_PROFILE_MANAGEMENT));
-            _client = new GrpcProfileManagement.GrpcProfileManagementClient(Channel);
+            // Channel = GrpcChannel.ForAddress(_configuration.GetGrpc(GrpcCodeNames.GRPC_PROFILE_MANAGEMENT));
+            // _client = new GrpcProfileManagement.GrpcProfileManagementClient(Channel);
+            _client = client;
         }
 
         public virtual async Task<List<JobProfileDto>> GetProfilesByUsersIds(List<int> userIds)
         {
             try
             {
-                Console.Out.WriteLine("Calling Profile Management Grpc Service..." + " " + _configuration.GetGrpc(GrpcCodeNames.GRPC_PROFILE_MANAGEMENT));
                 GetProfilesByUsersIdsRequest request = new GetProfilesByUsersIdsRequest();
                 request.UserIds.AddRange(userIds);
+                
+                //Add token
+                
                 ProfilesResponse reply = await _client.GetProfilesByUsersIdsAsync(request);
                 return _mapper.Map<List<JobProfileDto>>(reply.Profiles.ToList());
             }

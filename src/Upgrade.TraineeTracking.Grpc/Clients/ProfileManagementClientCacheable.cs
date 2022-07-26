@@ -4,8 +4,10 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Upgrade.TraineeTracking.DTO.DTOs;
 using Upgrade.TraineeTracking.Grpc.Configurations;
+using Upgrade.TraineeTracking.Options.grpc;
 using Upgrade.TraineeTracking.Shared.RedisUtils;
 
 namespace Upgrade.TraineeTracking.Grpc.Clients
@@ -13,7 +15,8 @@ namespace Upgrade.TraineeTracking.Grpc.Clients
     public class ProfileManagementClientCacheable : ProfileManagementClient
     {
         private readonly IDistributedCache _cache;
-        public ProfileManagementClientCacheable(IMapper mapper, IConfiguration configuration, IDistributedCache cache) : base(mapper, configuration)
+
+        public ProfileManagementClientCacheable(IMapper mapper, GrpcProfileManagement.GrpcProfileManagementClient client, IDistributedCache cache) : base(mapper, client)
         {
             _cache = cache;
         }
@@ -21,7 +24,7 @@ namespace Upgrade.TraineeTracking.Grpc.Clients
         public override async Task<List<JobProfileDto>> GetProfilesByUsersIds(List<int> ids)
         {
             string cacheKey = RedisKeyBuilder.Key(
-                Channel.Target, GrpcCodeNames.GRPC_PROFILE_MANAGEMENT, 
+                GrpcCodeNames.GRPC_PROFILE_MANAGEMENT, 
                 "GetProfilesByUsersIds", string.Join(",", ids.ToArray()));
             
             byte[] value = await _cache.GetAsync(cacheKey);
@@ -38,7 +41,7 @@ namespace Upgrade.TraineeTracking.Grpc.Clients
         public override async Task<JobProfileDto> GetProfileByFlattenPlan(int positionId, int levelId, int technologyId)
         {
             string cacheKey = RedisKeyBuilder.Key(
-                Channel.Target, GrpcCodeNames.GRPC_PROFILE_MANAGEMENT, 
+                GrpcCodeNames.GRPC_PROFILE_MANAGEMENT, 
                 "GetProfilesByUsersIds", string.Join(",", positionId, levelId, technologyId));
             
             byte[] value = await _cache.GetAsync(cacheKey);
@@ -51,5 +54,6 @@ namespace Upgrade.TraineeTracking.Grpc.Clients
             await _cache.SetAsync(cacheKey, ByteConverter.Array2Byte(list));
             return list;
         }
+
     }
 }

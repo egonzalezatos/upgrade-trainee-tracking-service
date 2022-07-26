@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Upgrade.TraineeTracking.Grpc.Extensions;
+using Upgrade.TraineeTracking.Options.grpc;
 using Upgrade.TraineeTracking.Services.Extensions;
 
 namespace Upgrade.TraineeTracking.IoC.Extensions

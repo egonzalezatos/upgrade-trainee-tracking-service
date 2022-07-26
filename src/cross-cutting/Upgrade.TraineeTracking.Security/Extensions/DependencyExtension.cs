@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Upgrade.TraineeTracking.OIDC.Extensions;
+using Upgrade.TraineeTracking.Security.Services;
+using Upgrade.TraineeTracking.Security.Services.Abstractions;
 
 namespace Upgrade.TraineeTracking.Security.Extensions
 {
@@ -25,7 +27,7 @@ namespace Upgrade.TraineeTracking.Security.Extensions
                     // IdentityServer emits a typ header by default, recommended extra check
                     options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
                 });
-            
+            services.AddScoped<ITokenProvider, TokenProvider>();
             services.AddCors(
                 options =>
                 {

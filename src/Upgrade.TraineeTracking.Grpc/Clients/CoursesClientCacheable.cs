@@ -13,7 +13,8 @@ namespace Upgrade.TraineeTracking.Grpc.Clients
     public class CoursesClientCacheable : CoursesServiceClient
     {
         private readonly IDistributedCache _cache;
-        public CoursesClientCacheable(IMapper mapper, IConfiguration configuration, IDistributedCache cache) : base(mapper, configuration)
+
+        public CoursesClientCacheable(IMapper mapper, GrpcCourses.GrpcCoursesClient client, IDistributedCache cache) : base(mapper, client)
         {
             _cache = cache;
         }
@@ -21,7 +22,7 @@ namespace Upgrade.TraineeTracking.Grpc.Clients
         public override async Task<List<CourseDto>> GetByIds(List<int> ids)
         {
             string cacheKey = RedisKeyBuilder.Key(
-                Channel.Target, GrpcCodeNames.GRPC_COURSES, 
+                GrpcCodeNames.GRPC_COURSES, 
                 "GetByIds", string.Join(",", ids.ToArray()));
             
             byte[] value = await _cache.GetAsync(cacheKey);
