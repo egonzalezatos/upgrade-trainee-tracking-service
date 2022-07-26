@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Upgrade.TraineeTracking.OIDC.Extensions;
+using Upgrade.TraineeTracking.Options.ExternalApis;
 using Upgrade.TraineeTracking.Security.Services;
 using Upgrade.TraineeTracking.Security.Services.Abstractions;
 
@@ -12,6 +14,9 @@ namespace Upgrade.TraineeTracking.Security.Extensions
     {
         public static IServiceCollection AddSecurity(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddCors();
+            services.AddSecuredHttpClients(configuration);
+            services.AddSecurityDependencies(configuration);
             Console.WriteLine($"Identity Server Address: {configuration["IAM_Address"]}");
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
@@ -27,7 +32,14 @@ namespace Upgrade.TraineeTracking.Security.Extensions
                     // IdentityServer emits a typ header by default, recommended extra check
                     options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
                 });
-            services.AddScoped<ITokenProvider, TokenProvider>();
+            
+
+            
+            return services;
+        }
+
+        private static IServiceCollection AddCors(this IServiceCollection services)
+        {
             services.AddCors(
                 options =>
                 {
@@ -36,14 +48,7 @@ namespace Upgrade.TraineeTracking.Security.Extensions
                         .WithOrigins("http://localhost")
                         .AllowAnyHeader());
                 });
-
-            //TODO: Remove
-            services.AddOIDC();
-            services.AddClientAccessTokenHttpClient("api", 
-                configureClient: cfg => cfg.BaseAddress = new Uri("http://localhost:5002/"))
-                .AddClientAccessTokenHandler();
-            
             return services;
-        }   
+        }
     }
 }

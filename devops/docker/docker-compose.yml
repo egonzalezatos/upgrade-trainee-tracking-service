@@ -8,6 +8,14 @@ services:
       MONGO_PASSWORD: admin
     depends_on: 
       - trainee-tracking-db
+        
+  trainee-tracking-cache:
+    container_name: trainee-tracking-cache
+    image: bitnami/redis:latest
+    ports:
+      - 6380:6379
+    environment:
+      REDIS_PASSWORD: admin
 
   course-service:
     image: egonzalezatos/courses

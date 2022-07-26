@@ -20,8 +20,9 @@ namespace Upgrade.TraineeTracking.Grpc.Extensions
             var serviceProvider = services.BuildServiceProvider();
             services.AddGrpcClients(serviceProvider.GetService<IOptions<GrpcOptions>>()!.Value);
             
-            if (enableRedis) services.AddClientsWithCache();
-            else services.AddClients();
+           // if (enableRedis) services.AddClientsWithCache();
+            // else 
+            services.AddClients();
             
             return services;
         }

@@ -42,7 +42,7 @@ namespace Upgrade.TraineeTracking.Api.Controllers
                 Console.WriteLine(userClaim.Value);
             }
             //HttpContext.VerifyUserHasAnyAcceptedScope("openid");
-            var http = _httpClientFactory.CreateClient("api");
+            var http = _httpClientFactory.CreateClient("HTTP_PMS");
             var response = await http.GetAsync("check-auth");
             // var response = await http.RequestWithTokenAsync(HttpMethod.Get, "http://localhost:5002/check-auth");
             response.EnsureSuccessStatusCode();
